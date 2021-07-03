@@ -43,5 +43,7 @@
 
 - (instancetype)initWithConfiguration:(BagelConfiguration*)configuration;
 
+- (void)sendDeviceExtendInfo:(NSDictionary *)extendInfo;
+
 @end
 

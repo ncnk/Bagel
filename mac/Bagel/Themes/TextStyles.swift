@@ -20,4 +20,11 @@ class TextStyles {
     static func addCodeAttributesToHTMLAttributedString(htmlAttributedString: NSMutableAttributedString) {
         htmlAttributedString.addAttributes(codeAttributes, range: NSRange(location: 0, length: htmlAttributedString.string.count))
     }
+    
+    
+    static let descAttributes = [NSAttributedString.Key.foregroundColor: NSColor.lightGray, NSAttributedString.Key.font: FontManager.codeFont(size: 11)]
+    
+    static func descAttributedString(string: String) -> NSAttributedString {
+        return NSAttributedString(string: string, attributes: descAttributes)
+    }
 }

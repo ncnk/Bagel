@@ -12,6 +12,7 @@ import macOSThemeKit
 class DevicesViewController: BaseViewController {
 
     var viewModel: DevicesViewModel?
+    var currentDeviceBlock : ((BagelDeviceController) -> ())?
     var onDeviceSelect : ((BagelDeviceController) -> ())?
     
     @IBOutlet weak var tableView: BaseTableView!
@@ -32,6 +33,11 @@ class DevicesViewController: BaseViewController {
     func refresh() {
         
         self.tableView.reloadData()
+        
+        if let item = self.viewModel?.selectedItem ?? self.viewModel?.items.first {
+            self.currentDeviceBlock?(item)
+        }
+        
     }
     
     override func viewDidLoad() {

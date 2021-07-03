@@ -13,4 +13,5 @@ class BagelDeviceModel: Codable {
     var deviceId: String?
     var deviceName: String?
     var deviceDescription: String?
+    var extendInfo: [String: String]?
 }

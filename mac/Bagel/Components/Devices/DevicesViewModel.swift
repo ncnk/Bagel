@@ -17,6 +17,8 @@ class DevicesViewModel: BaseListViewModel<BagelDeviceController>  {
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshItems), name: BagelNotifications.didSelectProject, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshItems), name: BagelNotifications.didSelectDevice, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.refreshItems), name: BagelNotifications.didUpdatePacket, object: nil)
     }
     
     var selectedItem: BagelDeviceController? {

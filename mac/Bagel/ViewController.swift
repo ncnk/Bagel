@@ -19,6 +19,8 @@ class ViewController: NSViewController {
     @IBOutlet weak var projectsBackgroundBox: NSBox!
     @IBOutlet weak var devicesBackgroundBox: NSBox!
     @IBOutlet weak var packetsBackgroundBox: NSBox!
+    @IBOutlet weak var deviceInfoView: NSView!
+    @IBOutlet var deviceInfoTextView: NSTextView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +31,8 @@ class ViewController: NSViewController {
         self.devicesBackgroundBox.fillColor = ThemeColor.deviceListBackgroundColor
         self.packetsBackgroundBox.fillColor = ThemeColor.packetListAndDetailBackgroundColor
         
+        self.deviceInfoView.layer?.backgroundColor = ThemeColor.projectListBackgroundColor.cgColor
+        self.deviceInfoTextView.backgroundColor = ThemeColor.projectListBackgroundColor
     }
 
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
@@ -53,8 +57,13 @@ class ViewController: NSViewController {
             self.devicesViewController?.viewModel = DevicesViewModel()
             self.devicesViewController?.viewModel?.register()
             
-            self.devicesViewController?.onDeviceSelect = { (selectedDeviceController) in
+            self.devicesViewController?.currentDeviceBlock = { [weak self] (selectedDeviceController) in
                 
+                self?.setDeviceExtendInfo(params: selectedDeviceController.extendInfo)
+            }
+            self.devicesViewController?.onDeviceSelect = { [weak self] (selectedDeviceController) in
+                
+                self?.setDeviceExtendInfo(params: selectedDeviceController.extendInfo)
                 BagelController.shared.selectedProjectController?.selectedDeviceController = selectedDeviceController
             }
             
@@ -89,6 +98,21 @@ class ViewController: NSViewController {
         }
     }
 
+    
+    func setDeviceExtendInfo(params: [String: String]?) {
+        self.deviceInfoTextView.textStorage?.mutableString.setString("")
+        
+        guard let keys = params?.keys else {
+            return
+        }
+        for key in keys {
+            let value = (params?[key] ?? "") + "\n"
+            let keyAttString = TextStyles.descAttributedString(string: "\(key): ")
+            let valueAttString = TextStyles.codeAttributedString(string: value)
+            self.deviceInfoTextView.textStorage?.append(keyAttString)
+            self.deviceInfoTextView.textStorage?.append(valueAttString)
+        }
+    }
 
 }
 

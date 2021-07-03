@@ -13,6 +13,8 @@ class BagelDeviceController: NSObject {
     var deviceId: String?
     var deviceName: String?
     var deviceDescription: String?
+    var extendInfo: [String: String]?
+    
     
     var packets: [BagelPacket] = []
     private(set) var selectedPacket: BagelPacket?
@@ -29,6 +31,10 @@ class BagelDeviceController: NSObject {
     @discardableResult
     func addPacket(newPacket: BagelPacket) -> Bool {
         
+        if newPacket.requestInfo == nil {
+            return false
+        }
+        
         for packet in self.packets {
             
             if packet.packetId == newPacket.packetId {
@@ -39,8 +45,6 @@ class BagelDeviceController: NSObject {
         }
         
         self.packets.append(newPacket)
-        
-        
         
         if self.packets.count == 1 {
             

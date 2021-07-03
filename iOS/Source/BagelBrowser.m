@@ -24,6 +24,7 @@
 
 @implementation BagelBrowser {
     NSMutableArray* sockets;
+    BagelRequestPacket* deviceExtendInfoPacket;
 }
 
 - (instancetype)initWithConfiguration:(BagelConfiguration*)configuration
@@ -75,7 +76,9 @@
 
 - (void)netServiceDidResolveAddress:(NSNetService*)service
 {
-    [self connectWithService:service];
+    if ([self connectWithService:service]) {
+        [self resendDeviceExtendInfo];
+    }
 }
 
 - (BOOL)connectWithService:(NSNetService*)service
@@ -107,8 +110,18 @@
     [socket readDataToLength:sizeof(uint64_t) withTimeout:-1.0 tag:0];
 }
 
+- (void)resendDeviceExtendInfo {
+    if (!deviceExtendInfoPacket) {
+        return;
+    }
+    [self sendPacket:deviceExtendInfoPacket];
+}
+
 - (void)sendPacket:(BagelRequestPacket*)packet
 {
+    if (packet.isDeviceExtendInfo) {
+        deviceExtendInfoPacket = packet;
+    }
     NSError *error;
     NSData* packetData = [NSJSONSerialization dataWithJSONObject:[packet toJSON] options:0 error:&error];
 

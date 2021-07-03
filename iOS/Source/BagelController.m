@@ -226,4 +226,14 @@ static NSString* queueId = @"com.yagiz.bagel.injectController";
     [self.browser sendPacket:packet];
 }
 
+- (void)sendDeviceExtendInfo:(NSDictionary *)extendInfo {
+    self.configuration.device.extendInfo = extendInfo;
+    BagelRequestPacket* packet = [[BagelRequestPacket alloc] init];
+    packet.packetId = BagelUtility.UUID;
+    packet.project = self.configuration.project;
+    packet.device = self.configuration.device;
+    packet.isDeviceExtendInfo = YES;
+    [self.browser sendPacket:packet];
+}
+
 @end

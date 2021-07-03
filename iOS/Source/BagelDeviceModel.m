@@ -39,6 +39,10 @@
         if ([json objectForKey:@"deviceDescription"]) {
             self.deviceDescription = [json objectForKey:@"deviceDescription"];
         }
+        
+        if ([json objectForKey:@"extendInfo"]) {
+            self.extendInfo = [json objectForKey:@"extendInfo"];
+        }
     }
 
     return self;
@@ -49,7 +53,7 @@
     NSMutableDictionary* json = [NSMutableDictionary new];
 
     if (self.deviceId) {
-        [json setObject:self.deviceName forKey:@"deviceId"];
+        [json setObject:self.deviceId forKey:@"deviceId"];
     }
 
     if (self.deviceName) {
@@ -58,6 +62,10 @@
 
     if (self.deviceDescription) {
         [json setObject:self.deviceDescription forKey:@"deviceDescription"];
+    }
+    
+    if (self.extendInfo) {
+        [json setObject:self.extendInfo forKey:@"extendInfo"];
     }
 
     return json;

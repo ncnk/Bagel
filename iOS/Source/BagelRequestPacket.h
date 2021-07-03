@@ -28,6 +28,8 @@
 
 @property (nonatomic, strong) NSString* packetId;
 
+@property (nonatomic, assign) BOOL isDeviceExtendInfo;
+
 @property (nonatomic, strong) BagelRequestInfo* requestInfo;
 
 @property (nonatomic, strong) BagelProjectModel* project;

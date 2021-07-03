@@ -25,7 +25,9 @@ class BagelProjectController: NSObject {
         for deviceController in self.deviceControllers {
             
             if deviceController.deviceId == newPacket.device?.deviceId {
-                
+                deviceController.deviceName = newPacket.device?.deviceName
+                deviceController.deviceDescription = newPacket.device?.deviceDescription
+                deviceController.extendInfo = newPacket.device?.extendInfo
                 return deviceController.addPacket(newPacket: newPacket)
             }
         }
@@ -35,6 +37,7 @@ class BagelProjectController: NSObject {
         deviceController.deviceId = newPacket.device?.deviceId
         deviceController.deviceName = newPacket.device?.deviceName
         deviceController.deviceDescription = newPacket.device?.deviceDescription
+        deviceController.extendInfo = newPacket.device?.extendInfo
         
         deviceController.addPacket(newPacket: newPacket)
         

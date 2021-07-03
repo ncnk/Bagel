@@ -27,4 +27,7 @@
 @property (nonatomic, strong) NSString* deviceName;
 @property (nonatomic, strong) NSString* deviceDescription;
 
+// 附加信息 key 和 value 都是 NSString 类型
+@property (nonatomic, strong) NSDictionary* extendInfo;
+
 @end

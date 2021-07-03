@@ -45,4 +45,6 @@ FOUNDATION_EXPORT const unsigned char BagelVersionString[];
 + (void)start;
 + (void)start:(BagelConfiguration*)configuration;
 
++ (void)setDeviceExtendInfo:(NSDictionary *)extendInfo;
+
 @end

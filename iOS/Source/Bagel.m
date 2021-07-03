@@ -35,6 +35,13 @@ static BagelController* controller;
 + (void)start:(BagelConfiguration*)configuration
 {
     controller = [[BagelController alloc] initWithConfiguration:configuration];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setDeviceExtendInfo:configuration.device.extendInfo];
+    });
+}
+
++ (void)setDeviceExtendInfo:(NSDictionary *)extendInfo {
+    [controller sendDeviceExtendInfo:extendInfo];
 }
 
 @end
