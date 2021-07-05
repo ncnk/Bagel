@@ -26,6 +26,10 @@ class DevicesViewController: BaseViewController {
         self.viewModel?.onChange = { [weak self] in
             
             self?.refresh()
+            
+            if let item = self?.viewModel?.selectedItem ?? self?.viewModel?.items.first {
+                self?.currentDeviceBlock?(item)
+            }
         }
         
     }
@@ -33,10 +37,6 @@ class DevicesViewController: BaseViewController {
     func refresh() {
         
         self.tableView.reloadData()
-        
-        if let item = self.viewModel?.selectedItem ?? self.viewModel?.items.first {
-            self.currentDeviceBlock?(item)
-        }
         
     }
     

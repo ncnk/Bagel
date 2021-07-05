@@ -39,7 +39,7 @@ class DevicesViewModel: BaseListViewModel<BagelDeviceController>  {
     @objc func refreshItems() {
         
         self.set(items: BagelController.shared.selectedProjectController?.deviceControllers ?? [])
-        self.onChange?()
+//        self.onChange?()
     }
     
 }

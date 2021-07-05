@@ -20,6 +20,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var devicesBackgroundBox: NSBox!
     @IBOutlet weak var packetsBackgroundBox: NSBox!
     @IBOutlet weak var deviceInfoView: NSView!
+    @IBOutlet weak var deviceInfoScrollView: NSScrollView!
     @IBOutlet var deviceInfoTextView: NSTextView!
     
     override func viewDidLoad() {
@@ -98,13 +99,26 @@ class ViewController: NSViewController {
         }
     }
 
+    lazy var formatter: DateFormatter = {
+        let formatter = DateFormatter.init()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        return formatter
+    }()
     
     func setDeviceExtendInfo(params: [String: String]?) {
-        self.deviceInfoTextView.textStorage?.mutableString.setString("")
+        
+        let scroll = self.deviceInfoTextView.visibleRect.maxY == self.deviceInfoTextView.bounds.maxY
+        
+        if (self.deviceInfoTextView.textStorage?.mutableString.length ?? 0) > 0 {
+            let attString = TextStyles.descAttributedString(string: "----------------------------------\n")
+            self.deviceInfoTextView.textStorage?.append(attString)
+        }
         
         guard let keys = params?.keys else {
             return
         }
+        let timeAttString = TextStyles.timeAttributedString(string: formatter.string(from: Date()) + "\n")
+        self.deviceInfoTextView.textStorage?.append(timeAttString)
         for key in keys {
             let value = (params?[key] ?? "") + "\n"
             let keyAttString = TextStyles.descAttributedString(string: "\(key): ")
@@ -112,6 +126,11 @@ class ViewController: NSViewController {
             self.deviceInfoTextView.textStorage?.append(keyAttString)
             self.deviceInfoTextView.textStorage?.append(valueAttString)
         }
+
+        if scroll {
+            self.deviceInfoTextView.scrollRangeToVisible(.init(location: self.deviceInfoTextView.string.count, length: 0))
+        }
+        
     }
 
 }
