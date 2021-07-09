@@ -144,12 +144,6 @@ static NSString* queueId = @"com.yagiz.bagel.injectController";
     }];
 }
 
-
-
-
-
-
-
 - (void)urlConnectionInjector:(BagelURLConnectionInjector *)injector didReceiveResponse:(NSURLConnection *)urlConnection response:(NSURLResponse *)response
 {
     [self performBlock:^{
@@ -228,12 +222,7 @@ static NSString* queueId = @"com.yagiz.bagel.injectController";
 
 - (void)sendDeviceExtendInfo:(NSDictionary *)extendInfo {
     self.configuration.device.extendInfo = extendInfo;
-    BagelRequestPacket* packet = [[BagelRequestPacket alloc] init];
-    packet.packetId = BagelUtility.UUID;
-    packet.project = self.configuration.project;
-    packet.device = self.configuration.device;
-    packet.isDeviceExtendInfo = YES;
-    [self.browser sendPacket:packet];
+    [self.browser resendDeviceInfo];
 }
 
 @end

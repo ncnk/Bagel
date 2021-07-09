@@ -25,16 +25,14 @@
 
 @import CocoaAsyncSocket;
 
-@interface BagelBrowser : NSObject <GCDAsyncSocketDelegate, NSNetServiceDelegate, NSNetServiceBrowserDelegate>
+@interface BagelBrowser : NSObject
 
 @property (nonatomic, weak) BagelConfiguration* configuration;
-
-@property (nonatomic, strong) NSMutableArray* services;
-@property (nonatomic, strong) NSNetServiceBrowser* serviceBrowser;
 
 - (instancetype)initWithConfiguration:(BagelConfiguration*)configuration;
 
 - (void)sendPacket:(BagelRequestPacket*)packet;
+- (void)resendDeviceInfo;
 
 @end
 
