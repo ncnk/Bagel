@@ -21,9 +21,9 @@
 
 #import "BagelBrowser.h"
 #import "BagelConfiguration.h"
-#import <LookinServer/PTChannel.h>
-#import <LookinServer/PTProtocol.h>
-#import <LookinServer/PTUSBHub.h>
+#import "BGPTChannel.h"
+#import "BGPTProtocol.h"
+#import "BGPTUSBHub.h"
 
 #pragma mark -
 
@@ -46,7 +46,7 @@
 GCDAsyncSocketDelegate,
 NSNetServiceDelegate,
 NSNetServiceBrowserDelegate,
-PTChannelDelegate
+BGPTChannelDelegate
 >
 @end
 
@@ -55,7 +55,7 @@ PTChannelDelegate
     NSNetServiceBrowser* serviceBrowser;
     NSMutableArray* sockets;
     BagelRequestPacket* deviceExtendInfoPacket;
-    __weak PTChannel *peerChannel;
+    __weak BGPTChannel *peerChannel;
 }
 
 - (instancetype)initWithConfiguration:(BagelConfiguration*)configuration {
@@ -97,14 +97,14 @@ PTChannelDelegate
 
 #pragma mark - PTChannelDelegate
 
-- (BOOL)ioFrameChannel:(PTChannel*)channel shouldAcceptFrameOfType:(uint32_t)type tag:(uint32_t)tag payloadSize:(uint32_t)payloadSize {
+- (BOOL)ioFrameChannel:(BGPTChannel*)channel shouldAcceptFrameOfType:(uint32_t)type tag:(uint32_t)tag payloadSize:(uint32_t)payloadSize {
     return NO;
 }
 
-- (void)ioFrameChannel:(PTChannel*)channel didEndWithError:(NSError*)error {
+- (void)ioFrameChannel:(BGPTChannel*)channel didEndWithError:(NSError*)error {
 }
 
-- (void)ioFrameChannel:(PTChannel*)channel didAcceptConnection:(PTChannel*)otherChannel fromAddress:(PTAddress*)address {
+- (void)ioFrameChannel:(BGPTChannel*)channel didAcceptConnection:(BGPTChannel*)otherChannel fromAddress:(BGPTAddress*)address {
     if (peerChannel) {
         [peerChannel cancel];
     }
@@ -113,7 +113,7 @@ PTChannelDelegate
     [self resendDeviceInfo];
 }
 
-- (void)ioFrameChannel:(PTChannel *)channel didReceiveFrameOfType:(uint32_t)type tag:(uint32_t)tag payload:(PTData *)payload {
+- (void)ioFrameChannel:(BGPTChannel *)channel didReceiveFrameOfType:(uint32_t)type tag:(uint32_t)tag payload:(NSData *)payload {
 }
 
 @end
@@ -121,7 +121,7 @@ PTChannelDelegate
 @implementation BagelBrowser (USB)
 
 - (void)startUSBBrowsing {
-    PTChannel *channel = [PTChannel channelWithDelegate:self];
+    BGPTChannel *channel = [BGPTChannel channelWithDelegate:self];
     [channel listenOnPort:43210 IPv4Address:INADDR_LOOPBACK callback:^(NSError *error) {
         NSLog(@"%@", error ? error : @"");
     }];
@@ -129,11 +129,7 @@ PTChannelDelegate
 
 - (void)sendDataByUSB:(NSData*)data {
     if (data) {
-        CFDataRef immutableSelf = CFBridgingRetain([data copy]);
-        dispatch_data_t payload = dispatch_data_create(data.bytes, data.length, dispatch_get_main_queue(), ^{
-            CFRelease(immutableSelf);
-        });
-        [peerChannel sendFrameOfType:101 tag:0 withPayload:payload callback:^(NSError *error) {
+        [peerChannel sendFrameOfType:101 tag:0 withPayload:data callback:^(NSError *error) {
         }];
     }
 }

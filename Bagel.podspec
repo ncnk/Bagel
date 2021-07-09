@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'Bagel'
-  s.version          = '1.4.0'
+  s.version          = '2.0.0'
   s.summary          = 'Bagel is a little native iOS network sniffer.'
 
   s.description      = <<-DESC
@@ -11,11 +11,11 @@ Bagel is a native iOS network sniffer. It's not a proxy debugger so you don't ha
   s.homepage         = 'https://github.com/yagiz/Bagel'
   s.license          = { :type => 'APACHE', :file => 'LICENSE' }
   s.author           = { 'Yagiz' => 'yagizgurgul@gmail.com' }
-  s.source           = { :git => 'https://github.com/yagiz/Bagel.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/ncnk/Bagel.git', :tag => s.version.to_s }
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '10.12'
   s.tvos.deployment_target = '11.0'
-  s.source_files = 'iOS/Source/*.{h,m}'
+  s.source_files = 'iOS/Source/*.{h,m}', 'iOS/Source/**/*.{h,m}'
 
   s.dependency 'CocoaAsyncSocket'
   s.requires_arc = true
