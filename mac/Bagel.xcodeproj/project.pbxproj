@@ -11,6 +11,7 @@
 		8A814D05228ECCED0049A64E /* DetailSectionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A814D04228ECCED0049A64E /* DetailSectionProtocol.swift */; };
 		8A814D07229025FF0049A64E /* VerticallyCenteredTextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A814D06229025FF0049A64E /* VerticallyCenteredTextFieldCell.swift */; };
 		9AAA3A9C54B46F8D2C8DD674 /* Pods_Bagel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E3BE2EECB0984D92EFCA30 /* Pods_Bagel.framework */; };
+		B796BCB22696F82F00AFFE60 /* PeertablPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = B796BCB12696F82F00AFFE60 /* PeertablPublisher.swift */; };
 		BC1F5B37216746D30045C871 /* FontManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1F5B36216746D30045C871 /* FontManager.swift */; };
 		BC32643621738AF0006452FE /* KeyValueRepresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC32643521738AF0006452FE /* KeyValueRepresentation.swift */; };
 		BC5E76C9216A64DB000F658D /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5E76C8216A64DB000F658D /* Theme.swift */; };
@@ -120,6 +121,7 @@
 		1191142921F8B9CB00BFCA48 /* CURLRepresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CURLRepresentation.swift; sourceTree = "<group>"; };
 		8A814D04228ECCED0049A64E /* DetailSectionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailSectionProtocol.swift; sourceTree = "<group>"; };
 		8A814D06229025FF0049A64E /* VerticallyCenteredTextFieldCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticallyCenteredTextFieldCell.swift; sourceTree = "<group>"; };
+		B796BCB12696F82F00AFFE60 /* PeertablPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeertablPublisher.swift; sourceTree = "<group>"; };
 		BC1F5B36216746D30045C871 /* FontManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontManager.swift; sourceTree = "<group>"; };
 		BC32643521738AF0006452FE /* KeyValueRepresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValueRepresentation.swift; sourceTree = "<group>"; };
 		BC5E76C8216A64DB000F658D /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
@@ -267,6 +269,14 @@
 				BCEB9AB6217DD546008BBF3C /* DatePacketTableCellView.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		B796BCA92696F5E800AFFE60 /* Peertalk */ = {
+			isa = PBXGroup;
+			children = (
+				B796BCB12696F82F00AFFE60 /* PeertablPublisher.swift */,
+			);
+			path = Peertalk;
 			sourceTree = "<group>";
 		};
 		BC1F5B35216746CA0045C871 /* Fonts */ = {
@@ -470,6 +480,7 @@
 		BCD0E025210F5E0D00CE5C7B /* Bagel */ = {
 			isa = PBXGroup;
 			children = (
+				B796BCA92696F5E800AFFE60 /* Peertalk */,
 				BC911A3F2168BC7F00B755D4 /* Themes */,
 				BC1F5B35216746CA0045C871 /* Fonts */,
 				BC75A80921737A7300A2A5B3 /* jsonViewer */,
@@ -721,6 +732,7 @@
 				TargetAttributes = {
 					BCD0E022210F5E0D00CE5C7B = {
 						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 1250;
 						ProvisioningStyle = Manual;
 					};
 					BCD0E034210F5E0D00CE5C7B = {
@@ -828,12 +840,14 @@
 				"${PODS_ROOT}/Target Support Files/Pods-Bagel/Pods-Bagel-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
 				"${BUILT_PRODUCTS_DIR}/Highlightr/Highlightr.framework",
+				"${BUILT_PRODUCTS_DIR}/PeerTalk/PeerTalk.framework",
 				"${BUILT_PRODUCTS_DIR}/macOSThemeKit/macOSThemeKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaAsyncSocket.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Highlightr.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PeerTalk.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/macOSThemeKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -893,6 +907,7 @@
 				BC9C779F2163528E00E8ADE8 /* RequestHeadersViewModel.swift in Sources */,
 				BC911A492168F27700B755D4 /* DarkTheme.swift in Sources */,
 				BC911A442168E10F00B755D4 /* LightTheme.swift in Sources */,
+				B796BCB22696F82F00AFFE60 /* PeertablPublisher.swift in Sources */,
 				BCD0E029210F5E0D00CE5C7B /* ViewController.swift in Sources */,
 				BC1F5B37216746D30045C871 /* FontManager.swift in Sources */,
 				BCA60B522162655000B9DCAD /* FlatTableHeaderCell.swift in Sources */,
@@ -1013,7 +1028,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -1066,7 +1081,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -1078,16 +1093,18 @@
 			baseConfigurationReference = D3BC1136B2E3E3417E241E77 /* Pods-Bagel.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Bagel/Bagel.entitlements;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 6H6853D8TF;
 				INFOPLIST_FILE = Bagel/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yagiz.Bagel;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
@@ -1097,13 +1114,14 @@
 			baseConfigurationReference = CF8C8D13D8DDE9F8E381A103 /* Pods-Bagel.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Bagel/Bagel.entitlements;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 6H6853D8TF;
 				INFOPLIST_FILE = Bagel/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yagiz.Bagel;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

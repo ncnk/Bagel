@@ -23,7 +23,9 @@ class BagelPublisher: NSObject {
     var netService: NetService!
     
     func startPublishing() {
-        
+        PeertablPublisher.shared.startListener()
+        PeertablPublisher.shared.delegate = self
+                
         self.sockets = []
         
         self.mainSocket = GCDAsyncSocket(delegate: self, delegateQueue: DispatchQueue.global(qos: .background))
@@ -71,6 +73,12 @@ class BagelPublisher: NSObject {
             
             print(error)
         }
+    }
+}
+
+extension BagelPublisher: PeertablPublisherDelegate {
+    func didReceiveNewPacketData(packetData: Data) {
+        parseBody(data: packetData)
     }
 }
 

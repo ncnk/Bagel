@@ -11,7 +11,7 @@ import Cocoa
 class BagelDeviceController: NSObject {
 
     var deviceId: String?
-    var deviceName: String?
+    var deviceName: String? = "Unknown"
     var deviceDescription: String?
     var extendInfo: [String: String]?
     

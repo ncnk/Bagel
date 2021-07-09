@@ -30,5 +30,9 @@
 	<string>Main</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>com.apple.security.temporary-exception.sbpl</key>
+	<array>
+		<string>allow network-outbound (literal "/private/var/run/usbmuxd")</string>
+	</array>
 </dict>
 </plist>

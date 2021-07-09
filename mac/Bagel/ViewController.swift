@@ -15,6 +15,9 @@ class ViewController: NSViewController {
     var devicesViewController: DevicesViewController?
     var packetsViewController: PacketsViewController?
     var detailVeiwController: DetailViewController?
+    var lastDeviceID: String?
+    
+    var deviceInfoCache = [String: NSMutableAttributedString]()
     
     @IBOutlet weak var projectsBackgroundBox: NSBox!
     @IBOutlet weak var devicesBackgroundBox: NSBox!
@@ -34,6 +37,9 @@ class ViewController: NSViewController {
         
         self.deviceInfoView.layer?.backgroundColor = ThemeColor.projectListBackgroundColor.cgColor
         self.deviceInfoTextView.backgroundColor = ThemeColor.projectListBackgroundColor
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(updateDeviceExtendInfo(notification:)), name: BagelNotifications.didGetPacket, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateDeviceExtendInfo(notification:)), name: BagelNotifications.didUpdatePacket, object: nil)
     }
 
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
@@ -58,13 +64,13 @@ class ViewController: NSViewController {
             self.devicesViewController?.viewModel = DevicesViewModel()
             self.devicesViewController?.viewModel?.register()
             
-            self.devicesViewController?.currentDeviceBlock = { [weak self] (selectedDeviceController) in
-                
-                self?.setDeviceExtendInfo(params: selectedDeviceController.extendInfo)
-            }
+//            self.devicesViewController?.deviceInfoRefreshBlock = { [weak self] (selectedDeviceController) in
+//                self?.updateDeviceExtendInfo(device: selectedDeviceController)
+//            }
             self.devicesViewController?.onDeviceSelect = { [weak self] (selectedDeviceController) in
-                
-                self?.setDeviceExtendInfo(params: selectedDeviceController.extendInfo)
+                if let deviceID = selectedDeviceController.deviceId {
+                    self?.refreUI(deviceID: deviceID)
+                }
                 BagelController.shared.selectedProjectController?.selectedDeviceController = selectedDeviceController
             }
             
@@ -105,32 +111,56 @@ class ViewController: NSViewController {
         return formatter
     }()
     
-    func setDeviceExtendInfo(params: [String: String]?) {
-        
-        let scroll = self.deviceInfoTextView.visibleRect.maxY == self.deviceInfoTextView.bounds.maxY
-        
-        if (self.deviceInfoTextView.textStorage?.mutableString.length ?? 0) > 0 {
-            let attString = TextStyles.descAttributedString(string: "----------------------------------\n")
-            self.deviceInfoTextView.textStorage?.append(attString)
-        }
-        
-        guard let keys = params?.keys else {
+    @objc func updateDeviceExtendInfo(notification: Notification) {
+        guard let packet = notification.userInfo?["packet"] as? BagelPacket else {
             return
         }
-        let timeAttString = TextStyles.timeAttributedString(string: formatter.string(from: Date()) + "\n")
-        self.deviceInfoTextView.textStorage?.append(timeAttString)
-        for key in keys {
-            let value = (params?[key] ?? "") + "\n"
-            let keyAttString = TextStyles.descAttributedString(string: "\(key): ")
-            let valueAttString = TextStyles.codeAttributedString(string: value)
-            self.deviceInfoTextView.textStorage?.append(keyAttString)
-            self.deviceInfoTextView.textStorage?.append(valueAttString)
-        }
-
-        if scroll {
-            self.deviceInfoTextView.scrollRangeToVisible(.init(location: self.deviceInfoTextView.string.count, length: 0))
+        
+        guard let deviceId = packet.device?.deviceId else {
+            return
         }
         
+        let newInfoString = NSMutableAttributedString.init()
+        
+        if let infoString = deviceInfoCache[deviceId] {
+            newInfoString.append(infoString)
+        }
+        else {
+            let attString = TextStyles.descAttributedString(string: "\n↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓\n")
+            newInfoString.append(attString)
+            
+            let deviceName = packet.device?.deviceName ?? "Unknown"
+            let deviceAttString = TextStyles.deviceNameAttributedString(string: "> " + deviceName + "\n")
+            newInfoString.append(deviceAttString)
+        }
+        
+        let params: [String: String]? = packet.device?.extendInfo
+        
+        if let keys = params?.keys {
+            let attString = TextStyles.descAttributedString(string: "----------------------------------\n")
+            newInfoString.append(attString)
+            
+            let timeAttString = TextStyles.timeAttributedString(string: formatter.string(from: Date()) + "\n")
+            newInfoString.append(timeAttString)
+            for key in keys {
+                let value = (params?[key] ?? "") + "\n"
+                let keyAttString = TextStyles.descAttributedString(string: "\(key): ")
+                let valueAttString = TextStyles.codeAttributedString(string: value)
+                newInfoString.append(keyAttString)
+                newInfoString.append(valueAttString)
+            }
+        }
+        deviceInfoCache[deviceId] = newInfoString
+        refreUI(deviceID: deviceId)
+    }
+    
+    func refreUI(deviceID: String) {
+        self.deviceInfoTextView.textStorage?.mutableString.setString("")
+        guard let infoString = deviceInfoCache[deviceID] else {
+            return
+        }
+        self.deviceInfoTextView.textStorage?.append(infoString)
+        self.deviceInfoTextView.scrollRangeToVisible(.init(location: self.deviceInfoTextView.string.count, length: 0))
     }
 
 }

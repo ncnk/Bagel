@@ -33,4 +33,10 @@ class TextStyles {
     static func timeAttributedString(string: String) -> NSAttributedString {
         return NSAttributedString(string: string, attributes: timeAttributes)
     }
+    
+    static let deviceNameAttributes = [NSAttributedString.Key.foregroundColor: NSColor.darkGray, NSAttributedString.Key.font: FontManager.codeFont(size: 15)]
+    
+    static func deviceNameAttributedString(string: String) -> NSAttributedString {
+        return NSAttributedString(string: string, attributes: deviceNameAttributes)
+    }
 }

@@ -12,7 +12,7 @@ import macOSThemeKit
 class DevicesViewController: BaseViewController {
 
     var viewModel: DevicesViewModel?
-    var currentDeviceBlock : ((BagelDeviceController) -> ())?
+    var deviceInfoRefreshBlock : ((BagelDeviceController) -> ())?
     var onDeviceSelect : ((BagelDeviceController) -> ())?
     
     @IBOutlet weak var tableView: BaseTableView!
@@ -26,10 +26,6 @@ class DevicesViewController: BaseViewController {
         self.viewModel?.onChange = { [weak self] in
             
             self?.refresh()
-            
-            if let item = self?.viewModel?.selectedItem ?? self?.viewModel?.items.first {
-                self?.currentDeviceBlock?(item)
-            }
         }
         
     }
