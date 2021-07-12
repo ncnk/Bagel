@@ -117,13 +117,13 @@ static NSString *kPlistPacketTypeListen = @"Listen";
 static NSString *kPlistPacketTypeConnect = @"Connect";
 
 // Represents a channel of communication between the host process and a remote
-// (device) system. In practice, a PTUSBChannel is connected to a usbmuxd
+// (device) system. In practice, a BGPTUSBChannel is connected to a usbmuxd
 // endpoint which is configured to either listen for device changes (the
 // BGPTUSBHub's channel is usually configured as a device notification listener) or
 // configured as a TCP bridge (e.g. channels returned from BGPTUSBHub's
 // connectToDevice:port:callback:). You should not create channels yourself, but
 // let BGPTUSBHub provide you with already configured channels.
-@interface PTUSBChannel : NSObject {
+@interface BGPTUSBChannel : NSObject {
   dispatch_io_t channel_;
   dispatch_queue_t queue_;
   uint32_t nextPacketTag_;
@@ -133,8 +133,8 @@ static NSString *kPlistPacketTypeConnect = @"Connect";
 }
 
 // The underlying dispatch I/O channel. This is handy if you want to handle your
-// own I/O logic without PTUSBChannel. Remember to dispatch_retain() the channel
-// if you plan on using it as it might be released from the PTUSBChannel at any
+// own I/O logic without BGPTUSBChannel. Remember to dispatch_retain() the channel
+// if you plan on using it as it might be released from the BGPTUSBChannel at any
 // point in time.
 @property (readonly) dispatch_io_t dispatchChannel;
 
@@ -159,7 +159,7 @@ static NSString *kPlistPacketTypeConnect = @"Connect";
 @end
 
 
-@interface PTUSBChannel (Private)
+@interface BGPTUSBChannel (Private)
 
 + (NSDictionary*)packetDictionaryWithPacketType:(NSString*)messageType payload:(NSDictionary*)payload;
 - (BOOL)openOnQueue:(dispatch_queue_t)queue error:(NSError**)error onEnd:(void(^)(NSError *error))onEnd;
@@ -176,7 +176,7 @@ static NSString *kPlistPacketTypeConnect = @"Connect";
 
 
 @interface BGPTUSBHub () {
-  PTUSBChannel *channel_;
+  BGPTUSBChannel *channel_;
 }
 - (void)handleBroadcastPacket:(NSDictionary*)packet;
 @end
@@ -212,7 +212,7 @@ static NSString *kPlistPacketTypeConnect = @"Connect";
     if (onStart) onStart(nil);
     return;
   }
-  channel_ = [PTUSBChannel new];
+  channel_ = [BGPTUSBChannel new];
   NSError *error = nil;
   if ([channel_ openOnQueue:queue error:&error onEnd:onEnd]) {
     [channel_ listenWithBroadcastHandler:^(NSDictionary *packet) { [self handleBroadcastPacket:packet]; } callback:onStart];
@@ -223,7 +223,7 @@ static NSString *kPlistPacketTypeConnect = @"Connect";
 
 
 - (void)connectToDevice:(NSNumber*)deviceID port:(int)port onStart:(void(^)(NSError*, dispatch_io_t))onStart onEnd:(void(^)(NSError*))onEnd {
-  PTUSBChannel *channel = [PTUSBChannel new];
+  BGPTUSBChannel *channel = [BGPTUSBChannel new];
   NSError *error = nil;
   
   if (![channel openOnQueue:dispatch_get_main_queue() error:&error onEnd:onEnd]) {
@@ -233,7 +233,7 @@ static NSString *kPlistPacketTypeConnect = @"Connect";
   
   port = ((port<<8) & 0xFF00) | (port>>8); // limit
   
-  NSDictionary *packet = [PTUSBChannel packetDictionaryWithPacketType:kPlistPacketTypeConnect
+  NSDictionary *packet = [BGPTUSBChannel packetDictionaryWithPacketType:kPlistPacketTypeConnect
                                                              payload:[NSDictionary dictionaryWithObjectsAndKeys:
                                                                       deviceID, BGPTUSBHubNotificationKeyDeviceID,
                                                                       [NSNumber numberWithInt:port], @"PortNumber",
@@ -264,7 +264,7 @@ static NSString *kPlistPacketTypeConnect = @"Connect";
 
 #pragma mark -
 
-@implementation PTUSBChannel
+@implementation BGPTUSBChannel
 
 + (NSDictionary*)packetDictionaryWithPacketType:(NSString*)messageType payload:(NSDictionary*)payload {
   NSDictionary *packet = nil;
@@ -370,7 +370,7 @@ static NSString *kPlistPacketTypeConnect = @"Connect";
   autoReadPackets_ = YES;
   [self scheduleReadPacketWithBroadcastHandler:broadcastHandler];
   
-  NSDictionary *packet = [PTUSBChannel packetDictionaryWithPacketType:kPlistPacketTypeListen payload:nil];
+  NSDictionary *packet = [BGPTUSBChannel packetDictionaryWithPacketType:kPlistPacketTypeListen payload:nil];
   
   [self sendRequest:packet callback:^(NSError *error_, NSDictionary *responsePacket) {
     if (!callback)

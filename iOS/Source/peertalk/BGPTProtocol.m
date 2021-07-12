@@ -43,9 +43,9 @@ static void _release_queue_local_protocol(void *objcobj) {
 }
 
 
-@interface RQueueLocalIOFrameProtocol : BGPTProtocol
+@interface BGRQueueLocalIOFrameProtocol : BGPTProtocol
 @end
-@implementation RQueueLocalIOFrameProtocol
+@implementation BGRQueueLocalIOFrameProtocol
 - (void)setQueue:(dispatch_queue_t)queue {
 }
 @end
@@ -58,7 +58,7 @@ static void _release_queue_local_protocol(void *objcobj) {
   static const char currentQueueFrameProtocolKey;
   BGPTProtocol *currentQueueFrameProtocol = (__bridge BGPTProtocol*)dispatch_queue_get_specific(queue, &currentQueueFrameProtocolKey);
   if (!currentQueueFrameProtocol) {
-    currentQueueFrameProtocol = [[RQueueLocalIOFrameProtocol alloc] initWithDispatchQueue:NULL];
+    currentQueueFrameProtocol = [[BGRQueueLocalIOFrameProtocol alloc] initWithDispatchQueue:NULL];
     currentQueueFrameProtocol->queue_ = queue; // reference, no retain, since we would create cyclic references
     dispatch_queue_set_specific(queue, &currentQueueFrameProtocolKey, (__bridge_retained void*)currentQueueFrameProtocol, &_release_queue_local_protocol);
     return (__bridge BGPTProtocol*)dispatch_queue_get_specific(queue, &currentQueueFrameProtocolKey); // to avoid race conds
@@ -261,11 +261,11 @@ static void _release_queue_local_protocol(void *objcobj) {
 @end
 
 
-@interface _PTDispatchData : NSObject {
+@interface _BGPTDispatchData : NSObject {
   dispatch_data_t dispatchData_;
 }
 @end
-@implementation _PTDispatchData
+@implementation _BGPTDispatchData
 - (id)initWithDispatchData:(dispatch_data_t)dispatchData {
   if (!(self = [super init])) return nil;
   dispatchData_ = dispatchData;
@@ -301,7 +301,7 @@ static void _release_queue_local_protocol(void *objcobj) {
     return nil;
   }
   
-  _PTDispatchData *dispatchDataRef = [[_PTDispatchData alloc] initWithDispatchData:contiguousData];
+  _BGPTDispatchData *dispatchDataRef = [[_BGPTDispatchData alloc] initWithDispatchData:contiguousData];
   NSData *newData = [NSData dataWithBytesNoCopy:(void*)buffer length:bufferSize freeWhenDone:NO];
   static const bool kDispatchDataRefKey;
   objc_setAssociatedObject(newData, (const void*)kDispatchDataRefKey, dispatchDataRef, OBJC_ASSOCIATION_RETAIN);
